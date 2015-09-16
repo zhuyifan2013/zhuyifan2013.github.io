@@ -26,13 +26,13 @@ source_dir: source
 public_dir: public
 
 # Writing
-new_post_name: :year-:month-:day-:title.md # File name of new posts
+new_post_name: :title-:year-:month-:day.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
-post_asset_folder: true
+post_asset_folder: false
 relative_link: false
 highlight:
   enable: true
@@ -79,7 +79,7 @@ disqus_shortname:
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: pacman
+theme: light
 stylus:
 compress: true
 exclude_generator:
@@ -87,6 +87,10 @@ exclude_generator:
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type: github
+  type: git
   repo: https://github.com/zhuyifan2013/zhuyifan2013.github.io.git
   branch: master
+
+#TOC plugin
+toc:
+  maxDepth: 2

@@ -12,7 +12,7 @@ language: zh-CN
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yifan.cool
+url: http://zhuyifan2013.github.io
 root: /
 permalink: :year/:month/:day/:title/
 tag_dir: tags
@@ -26,7 +26,7 @@ source_dir: source
 public_dir: public
 
 # Writing
-new_post_name: :title-:year-:month-:day.md # File name of new posts
+new_post_name: :month-:day-:year-:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
@@ -48,7 +48,7 @@ tag_map:
 ## 2: Enable pagination
 ## 1: Disable pagination
 ## 0: Fully Disable
-archive: 2
+archive: 1
 category: 2
 tag: 2
 
@@ -56,7 +56,7 @@ tag: 2
 ## Hexo uses Connect as a server
 ## You can customize the logger format as defined in
 ## http://www.senchalabs.org/connect/logger.html
-port: 4000
+port: 4002
 server_ip: localhost
 logger: false
 logger_format: dev
@@ -79,7 +79,7 @@ disqus_shortname:
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: light
+theme: typing
 stylus:
 compress: true
 exclude_generator:

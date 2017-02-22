@@ -1,5 +1,5 @@
 # Lang
-language: zh
+language: zh-CN
 
 # Header
 menu:
@@ -31,5 +31,5 @@ links:
   Mail: mailto:zhu_yifan@qq.com
 
 # Info
-archive_footer_content: None
-post_footer_content: None
+archive_footer_content: Artist
+post_footer_content: Artist

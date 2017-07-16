@@ -12,78 +12,80 @@ categories:
 先尝试实现一次，在每次text有更新的时候做一次 `format`， 代码如下（省略 `import` 的内容）：
 
 ```java
-        public class FormatterTest extends Activity {
-    
-        private final char SEPARATOR = ' ';
-    
+public class FormatterTest extends Activity {
+
+private final char SEPARATOR = ' ';
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.formatter_test);
+    EditText editText = (EditText) findViewById(R.id.phone_num);
+    editText.addTextChangedListener(new TextWatcher() {
+
+        private boolean mStopFormatting;
+
         @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.formatter_test);
-            EditText editText = (EditText) findViewById(R.id.phone_num);
-            editText.addTextChangedListener(new TextWatcher() {
-    
-                private boolean mStopFormatting;
-    
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    
-                }
-    
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-    
-                }
-    
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if(mStopFormatting) {
-                        return;
-                    }
-                    mStopFormatting = true;
-                    format(s);
-                    mStopFormatting = false;
-                }
-            });
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
         }
-    
-        private String format(String s) {
-            SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-            format(stringBuilder);
-            return stringBuilder.toString();
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
         }
-    
-        private void format(Editable s) {
-            clean(s);
-            if (s.length() < 4) {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(mStopFormatting) {
                 return;
             }
-            int i = 0;
-            int valid = 0;
-            while (i < s.length()) {
-                if (valid % 4 == 0 && valid != 0) {
-                    s.insert(i, Character.toString(SEPARATOR));
-                    i++;
-                }
-                i++;
-                valid++;
-            }
+            mStopFormatting = true;
+            format(s);
+            mStopFormatting = false;
         }
-    
-        private void clean(Editable s) {
-            int p = 0;
-            while (p < s.length()) {
-                if (!Character.isDigit(s.charAt(p))) {
-                    s.delete(p,p+1);
-                }
-                p++;
-            }
-        }
+    });
+}
+
+private String format(String s) {
+    SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+    format(stringBuilder);
+    return stringBuilder.toString();
+}
+
+private void format(Editable s) {
+    clean(s);
+    if (s.length() < 4) {
+        return;
     }
+    int i = 0;
+    int valid = 0;
+    while (i < s.length()) {
+        if (valid % 4 == 0 && valid != 0) {
+            s.insert(i, Character.toString(SEPARATOR));
+            i++;
+        }
+        i++;
+        valid++;
+    }
+}
+
+private void clean(Editable s) {
+    int p = 0;
+    while (p < s.length()) {
+        if (!Character.isDigit(s.charAt(p))) {
+            s.delete(p,p+1);
+        }
+        p++;
+    }
+}
+}
 ```
 
 运行之后可以正常的format，不过将光标移动到空格位置删除的时候却无法删除。
 原因就是实际上是删除成功了，但是在 `afterTextChanged` 的时候又格式化了，因此空格在删除后又会出现，给人的感觉就是无法删除。
+
+<!--more--> 
 
 ### 第二次尝试实现
 既然删除了空格又会自动格式化，那我们在格式化之前判断一次，如果删除的这个为 `SEPARATOR`，就停止格式化。
@@ -92,46 +94,45 @@ categories:
 ```java
     editText.addTextChangedListener(new TextWatcher() {
 
-            private boolean mStopFormatting;
+        private boolean mStopFormatting;
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (mStopFormatting) {
-                    return;
-                }
-                if (count > 0 && hasSeparator(s, start, count)) {
-                    mStopFormatting = true;
-                }
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            if (mStopFormatting) {
+                return;
             }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (mStopFormatting) {
-                    mStopFormatting = (s.length() != 0);
-                    return;
-                }
+            if (count > 0 && hasSeparator(s, start, count)) {
                 mStopFormatting = true;
-                format(s);
-                mStopFormatting = false;
-            }
-        });
-        
-    private boolean hasSeparator(final CharSequence s, final int start, final int count) {
-        for (int i = start; i < start + count; i++) {
-            char c = s.charAt(i);
-            if (c == SEPARATOR) {
-                return true;
             }
         }
-        return false;
-    }
-```
 
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (mStopFormatting) {
+                mStopFormatting = (s.length() != 0);
+                return;
+            }
+            mStopFormatting = true;
+            format(s);
+            mStopFormatting = false;
+        }
+    });
+    
+private boolean hasSeparator(final CharSequence s, final int start, final int count) {
+    for (int i = start; i < start + count; i++) {
+        char c = s.charAt(i);
+        if (c == SEPARATOR) {
+            return true;
+        }
+    }
+    return false;
+}
+```
 这样就解决了空格不能被删除的问题，但是新的问题又来了，当删除一个空格之后，整个 `format` 就失效了。
 尽管可以使用，但是用户体验肯定是不好的，改！
 
@@ -141,42 +142,42 @@ categories:
 ```java
             editText.addTextChangedListener(new TextWatcher() {
 
-            private boolean mStopFormatting, mDeletedIsSeparator;
-            private int mDeletedIndex;
+private boolean mStopFormatting, mDeletedIsSeparator;
+private int mDeletedIndex;
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (mStopFormatting) {
-                    return;
-                }
-                if (count > 0 && hasSeparator(s, start, count)) {
-                    mDeletedIsSeparator = true;
-                    mDeletedIndex = start;
-                }
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (mDeletedIsSeparator) {
-                    mDeletedIsSeparator = false;
-                    editText.getEditableText().insert(mDeletedIndex, Character.toString(SEPARATOR));
-                    editText.setSelection(mDeletedIndex);
-                    return;
-                }
-                if (mStopFormatting) {
-                    return;
-                }
-                mStopFormatting = true;
-                format(s);
-                mStopFormatting = false;
-            }
-        });
+@Override
+public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    if (mStopFormatting) {
+        return;
     }
+    if (count > 0 && hasSeparator(s, start, count)) {
+        mDeletedIsSeparator = true;
+        mDeletedIndex = start;
+    }
+}
+
+@Override
+public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+}
+
+@Override
+public void afterTextChanged(Editable s) {
+    if (mDeletedIsSeparator) {
+        mDeletedIsSeparator = false;
+        editText.getEditableText().insert(mDeletedIndex, Character.toString(SEPARATOR));
+        editText.setSelection(mDeletedIndex);
+        return;
+    }
+    if (mStopFormatting) {
+        return;
+    }
+    mStopFormatting = true;
+    format(s);
+    mStopFormatting = false;
+}
+});
+}
 ```
 
 这次就没有任何问题了。

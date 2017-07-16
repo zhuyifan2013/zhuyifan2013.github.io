@@ -5,6 +5,7 @@ tags:
 - android
 category: Analysis
 ---
+
 **名称**: GuideBackgroundColorAnimation
 
 **分类**: `动画`
@@ -32,6 +33,7 @@ if (count != 0) {
 先得到页面数量`count`, 根据每一次的`position`和`positionOffset`计算得到`length`, `position`是从0开始计算, 最大值为`count - 1`, 如果有`n`个子页面, `position`的最大值就是`n-1`. 而`positionOffset`则是一个取值范围在[0,1]之间的值, 对于一个页面来说, 滑动到一半, `positionOffset`的值就是0.5, 全部滑过来的那一瞬间, 取值为1, 当然也是下一个新的`position`的0了. 因此length可以想象成一个取值范围为`[0,count]/count`(也就是`[0,1]`)之间的浮点数, 能反映全部过程中的某一个时间点.	
 根据这个百分比,再乘以总的时间`DURATION`就知道目前完成了整个动画的百分比了, 也就是`progress`, 随后调用`seek`方法.	
 
+<!--more-->
 
 ```java
 private void seek(long seekTime) {

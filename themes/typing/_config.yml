@@ -5,6 +5,7 @@ language: zh-CN
 menu:
   Home: /
   Archives: /archives
+  # Life: /collection
   About: /about
 rss: /atom.xml
 
@@ -32,5 +33,5 @@ links:
   Mail: mailto:zhu_yifan@qq.com
 
 # Info
-archive_footer_content: Artist
-post_footer_content: Artist
+archive_footer_content: Yifan
+post_footer_content: Yifan

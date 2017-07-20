@@ -8,9 +8,11 @@ $black-light: #222;
 $grey: #aeb4b9;
 $grey-bold: #777;
 $grey-light: #cacdd0;
+$grey-background: #f4f5f6;
 $scooter: #22C5E5;
+$typo-color: #1abc9c;
 
-$content-width: 60%;
+$content-width: 80%;
 
 
 @define-extend a-hover {
@@ -39,6 +41,7 @@ body {
   height: 100%;
   position: relative;
   box-sizing: border-box;
+  font-weight: 400;
 }
 
 body, h1, h2, h3, h4, h5, h6 {
@@ -55,7 +58,7 @@ body {
 
 
 a {
-  color: $black-light;
+  color: $black-normal;
   /* font-weight: 200; */
   text-decoration: none;
   border-bottom: solid 1px #eee;
@@ -66,10 +69,14 @@ a:hover {
   text-decoration: none;
   @extend a-hover;
 }
+code {
+  color: $typo-color;
+  background-color: $grey-background;
+}
 
 em {
   font-style: italic;
-  font-weight: lighter;
+  font-weight: normal;
 }
 
 .footer {
@@ -128,7 +135,7 @@ em {
 }
 
 .home {
-  font-weight: lighter;
+  font-weight: normal;
   color: $black-normal;
   line-height: 1.4;
   text-align: center;
@@ -233,7 +240,7 @@ em {
     color: $grey-light;
   }
   .archive-article-title {
-    font-weight: 200;
+    font-weight: 400;
   }
 
   .archive-year-wrap {
@@ -268,6 +275,10 @@ em {
       @extend nav-link-base;
       border: 0;
     }
+  }
+
+  a {
+    color: $typo-color;
   }
 
   hr {

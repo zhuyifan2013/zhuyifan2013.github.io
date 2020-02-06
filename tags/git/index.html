@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tag: git | Hack | Yifan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Hack life">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hack | Yifan">
+<meta property="og:url" content="http://zhuyifan2013.github.io/tags/git/index.html">
+<meta property="og:site_name" content="Hack | Yifan">
+<meta property="og:description" content="Hack life">
+<meta property="og:locale" content="zh">
+<meta property="article:author" content="Yifan">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hack | Yifan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/typing.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+  
+    <body>
+  
+      <div id="container" class="container">
+        <div class="category-container">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  
+  
+    <article id="post-git-workflow" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/20/git-workflow/">Git Workflow 和分支规范</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <h2 id="使用分支说明"><a href="#使用分支说明" class="headerlink" title="使用分支说明"></a>使用分支说明</h2><p><code>master</code><strong>[Must be Protected]</strong> : master 上的每一个 commit 都意味着一次版本的发布，所以普通的 commit 不要提交在这个分支上</p>
+<p><code>dev</code> <strong>[Could be Protected]</strong> : 主开发分支，开发过程(非 release 期间)中的 commit 都会提交在 dev 分支上<br><code>feature branch</code> : 自己开发过程中使用的分支，一般来说在本地开发完成后都会新建一个远程分支来承载此次修改，review 通过后会 merge 到 dev 分支上<br><code>release branch</code> <strong>[Must be Protected]</strong>: release 期间使用的分支。当产品开发到一定阶段需要发布的时，新建一个基于 dev 的分支，一般命名为  release-x.x.x , 此时进入 release 阶段，<strong>release 期间在 release 分支上的修改不可以是新的 feature</strong>，只能是 bug-fix，新的 feature 只能提交到 dev 分支上，在下次 release 发布，当 bug 修复完毕后，release 分支的代码会<strong>同时 merge 到 master 和 dev 上</strong>，往 dev 上 merge 时建议保留每次 PR 的信息 (git merge –no-ff) ，因为回顾的时候可以看到每次 commit 的信息，而 往 master 上 merge 的时候建议直接合成一个 commit (git merge) , 因为 master 上不需要保留每次 commit 的信息。release 分支使用后删除。<br><code>hot fix branch</code> : 在 从 release 往 master 上 merge 并发布之后，有严重的 bug 时，需要新建 hot-fix 分支修复问题，最终需要<strong>同时 merge 进 dev 和 master</strong>，使用后删除。</p>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><p>简单来说，工作流程就是，基于 dev 分支新建 feature 分支，开发完成后 merge 进 dev，到达发布时间之前拉出 release 分支交付测试，测试过程中发现 bug，基于 release 分支新建 bug-fix 分支修复，然后 merge 进 release，稳定后将 release 分支 merge 进 dev 和 master ，然后删除 release。</p>
+<p>其中，dev 和 master 分支是一直存在的，其他分支都是按需新建，使用完成后删除。</p>
+<p><img src="/img/2017-07-20/git-workflow.png" alt="git workflow"></p>
+<h2 id="PR-Pull-Request-提交规范"><a href="#PR-Pull-Request-提交规范" class="headerlink" title="PR(Pull Request) 提交规范"></a>PR(Pull Request) 提交规范</h2><p>如果使用 Github 之类的代码管理库，建议提交 PR 的时候遵循一定的规范，既方便别人review，也方便团队成员回顾。<br>每个 PR 的标题要使用以下的 Tag 作为开头：</p>
+<ul>
+<li><p><code>[Optimize]</code> 优化代码；去除无用代码；重新组织文档结构等等</p>
+</li>
+<li><p><code>[Bug-Fix]</code> 修改 BUG</p>
+</li>
+<li><p><code>[Hot-Fix]</code> 修复在 Release 之后的重要 BUG，需要同时往 master 分支合并的修复</p>
+</li>
+<li><p><code>[iOS]</code> / <code>[Android]</code> 该 PR 与特定平台相关，若都影响则不指定该 Tag</p>
+</li>
+<li><p><code>[Feature]</code> 功能性的代码提交，需要注意控制每个 PR 的大小，在开始做一个模块的时候就要规划好功能的开发递进，避免一次性提交大量代码。</p>
+<h2 id="分支与产品迭代"><a href="#分支与产品迭代" class="headerlink" title="分支与产品迭代"></a>分支与产品迭代</h2><p>以我们的产品开发为例，正常迭代周期为2周一个版本，可以安排在第一周周五从 dev 拉一个 release 的分支，并基于此 release 分支打包测试，测试出来的问题在下周二之前解决完毕，根据解决快慢，可以在剩下的时间里继续新功能的开发，并合入 dev 分支，第二周周四将 release 分支合入 master 并发布正式版本。<br>有重要的 Bug 需要第一时间解决(Hot-Fix)，合入 master 与 dev。</p>
+</li>
+</ul>
+<p><img src="/img/2017-07-20/product-workflow.png" alt="product workflow"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/07/20/git-workflow/" class="article-date">
+  <time datetime="2017-07-20T13:53:53.000Z" itemprop="datePublished">Jul 20 2017</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+
+</div>
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Yifan</p>
+
+
+      </div>
+    </footer>
+
+      
+  <script>
+   var disqus_shortname = 'yifan16';
+   
+   (function(){
+     var dsq = document.createElement('script');
+     dsq.type = 'text/javascript';
+     dsq.async = true;
+     dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/typing.js"></script>
+
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?552594b20fca263dbb0651a8155b477a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

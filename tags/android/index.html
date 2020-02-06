@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tag: android | Hack | Yifan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Hack life">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hack | Yifan">
+<meta property="og:url" content="http://zhuyifan2013.github.io/tags/android/index.html">
+<meta property="og:site_name" content="Hack | Yifan">
+<meta property="og:description" content="Hack life">
+<meta property="og:locale" content="zh">
+<meta property="article:author" content="Yifan">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hack | Yifan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/typing.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+  
+    <body>
+  
+      <div id="container" class="container">
+        <div class="category-container">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  
+  
+    <article id="post-gradle-study" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/07/gradle-study/">Gradle 学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p>gradle wrapper 最主要的目的就是方便其他人更方便的快速编译整个项目，不用担心各种版本的不同</p>
+<p>gradle wrapper 生成的文件有</p>
+<blockquote>
+<ul>
+<li>gradlew (Unix Shell script)</li>
+<li>gradlew.bat (Windows batch file)</li>
+<li>gradle/wrapper/gradle-wrapper.jar (Wrapper JAR)</li>
+<li>gradle/wrapper/gradle-wrapper.properties (Wrapper properties)</li>
+</ul>
+</blockquote>
+<p><strong>这些文件一定要提交到VCS中</strong></p>
+<p>生成的方法是使用 <code>gradle wrapper --gradle-version 2.0</code> 命令，自己也可以个性化这个task，更多个性化的内容参见<a href="https://docs.gradle.org/current/dsl/org.gradle.api.tasks.wrapper.Wrapper.html" target="_blank" rel="noopener">Wrapper</a>的API文档</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">task <span class="title">wrapper</span><span class="params">(type: Wrapper)</span> </span>&#123;</span><br><span class="line">    gradleVersion = <span class="string">'2.0'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此后可以直接使用 <code>./gradlew XXX</code> 进行编译，可以将<code>gradlew</code>看成一个包有gradle命令的壳</p>
+<p>需要注意的是，如果你在使用其他人生成好的gradle项目的时候，初次运行<code>./gradlew build</code> 会下载对应版本的gradle，下载的文件会存放在<code>~/.gradle/wrapper/dists</code>下</p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2016/04/07/gradle-study/" class="article-date">
+  <time datetime="2016-04-07T10:36:00.000Z" itemprop="datePublished">Apr 7 2016</time>
+</a>
+
+        </li>
+        
+          <li>
+            <span class="label">Category:</span>
+            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/tools/">tools</a>
+  </div>
+
+
+          </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tools/" rel="tag">tools</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-formatter-textwatcher-2015-09-15" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/15/formatter-textwatcher-2015-09-15/">从 Formatter 学习 TextWatcher</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p>电话号码和银行号码经常会有需要格式话为固定的样式，比如银行卡号通常会格式化为 <code>XXXX XXXX XXXX XXXX</code>，手机号通常会格式化为 <code>XXX XXXX XXXX</code>，对于手机号码可以用 Android 自带的 <code>PhoneNumberFormattingTextWatcher</code>, 但是这种格式化的方式有时候并不是我们想要的，那就需要自己来实现一个 <code>TextWatcher</code> 了。</p>
+<h3 id="第一次尝试实现"><a href="#第一次尝试实现" class="headerlink" title="第一次尝试实现"></a>第一次尝试实现</h3><p>先尝试实现一次，在每次text有更新的时候做一次 <code>format</code>， 代码如下（省略 <code>import</code> 的内容）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FormatterTest</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> SEPARATOR = <span class="string">' '</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.formatter_test);</span><br><span class="line">    EditText editText = (EditText) findViewById(R.id.phone_num);</span><br><span class="line">    editText.addTextChangedListener(<span class="keyword">new</span> TextWatcher() &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">boolean</span> mStopFormatting;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforeTextChanged</span><span class="params">(CharSequence s, <span class="keyword">int</span> start, <span class="keyword">int</span> count, <span class="keyword">int</span> after)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTextChanged</span><span class="params">(CharSequence s, <span class="keyword">int</span> start, <span class="keyword">int</span> before, <span class="keyword">int</span> count)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterTextChanged</span><span class="params">(Editable s)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(mStopFormatting) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            mStopFormatting = <span class="keyword">true</span>;</span><br><span class="line">            format(s);</span><br><span class="line">            mStopFormatting = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">format</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    SpannableStringBuilder stringBuilder = <span class="keyword">new</span> SpannableStringBuilder();</span><br><span class="line">    format(stringBuilder);</span><br><span class="line">    <span class="keyword">return</span> stringBuilder.toString();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">format</span><span class="params">(Editable s)</span> </span>&#123;</span><br><span class="line">    clean(s);</span><br><span class="line">    <span class="keyword">if</span> (s.length() &lt; <span class="number">4</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> valid = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; s.length()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (valid % <span class="number">4</span> == <span class="number">0</span> &amp;&amp; valid != <span class="number">0</span>) &#123;</span><br><span class="line">            s.insert(i, Character.toString(SEPARATOR));</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        i++;</span><br><span class="line">        valid++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">clean</span><span class="params">(Editable s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> p = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (p &lt; s.length()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!Character.isDigit(s.charAt(p))) &#123;</span><br><span class="line">            s.delete(p,p+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        p++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行之后可以正常的format，不过将光标移动到空格位置删除的时候却无法删除。<br>原因就是实际上是删除成功了，但是在 <code>afterTextChanged</code> 的时候又格式化了，因此空格在删除后又会出现，给人的感觉就是无法删除。</p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2015/09/15/formatter-textwatcher-2015-09-15/" class="article-date">
+  <time datetime="2015-09-15T13:18:35.000Z" itemprop="datePublished">Sep 15 2015</time>
+</a>
+
+        </li>
+        
+          <li>
+            <span class="label">Category:</span>
+            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/android/">android</a>
+  </div>
+
+
+          </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">android</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-analysis-guide-background-animation" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/19/analysis-guide-background-animation/">背景颜色随滑动而渐变的View</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p><strong>名称</strong>: GuideBackgroundColorAnimation</p>
+<p><strong>分类</strong>: <code>动画</code></p>
+<p><strong>项目地址</strong>: <a href="https://github.com/TaurusXi/GuideBackgroundColorAnimation" target="_blank" rel="noopener">https://github.com/TaurusXi/GuideBackgroundColorAnimation</a></p>
+<p><strong>功能</strong>: view的背景色能随着滑动而渐变, 适合引导页的设计,稍作改动也可用于栏目的切换.</p>
+<p><strong>分析</strong>:    </p>
+<p>这个小功能没有特别复杂的地方, 主要是在ViewPager的监听函数<code>onPageScrolled()</code>这里实现了颜色的改变.分析下过程吧:</p>
+<ol>
+<li>自定义一个View—ColorAnimationView    </li>
+<li>为view设置一各Viewpager, 并重写<code>ViewPager.OnPageChangeListener</code>    </li>
+<li>重点分析<code>onPageScrolled()</code>:    </li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count = getViewPagerChildCount() - <span class="number">1</span>;</span><br><span class="line"><span class="keyword">if</span> (count != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">float</span> length = (position + positionOffset) / count;</span><br><span class="line">    <span class="keyword">int</span> progress = (<span class="keyword">int</span>) (length * DURATION);</span><br><span class="line">        ColorAnimationView.<span class="keyword">this</span>.seek(progress);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先得到页面数量<code>count</code>, 根据每一次的<code>position</code>和<code>positionOffset</code>计算得到<code>length</code>, <code>position</code>是从0开始计算, 最大值为<code>count - 1</code>, 如果有<code>n</code>个子页面, <code>position</code>的最大值就是<code>n-1</code>. 而<code>positionOffset</code>则是一个取值范围在[0,1]之间的值, 对于一个页面来说, 滑动到一半, <code>positionOffset</code>的值就是0.5, 全部滑过来的那一瞬间, 取值为1, 当然也是下一个新的<code>position</code>的0了. 因此length可以想象成一个取值范围为<code>[0,count]/count</code>(也就是<code>[0,1]</code>)之间的浮点数, 能反映全部过程中的某一个时间点.<br>根据这个百分比,再乘以总的时间<code>DURATION</code>就知道目前完成了整个动画的百分比了, 也就是<code>progress</code>, 随后调用<code>seek</code>方法.    </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2015/05/19/analysis-guide-background-animation/" class="article-date">
+  <time datetime="2015-05-19T13:40:30.000Z" itemprop="datePublished">May 19 2015</time>
+</a>
+
+        </li>
+        
+          <li>
+            <span class="label">Category:</span>
+            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Analysis/">Analysis</a>
+  </div>
+
+
+          </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/analysis/" rel="tag">analysis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">android</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-timer-handler" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/26/timer-handler/">Handler和Timer作为计时器的优劣</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p>Android中可以采用<code>Timer＋Handler</code>或者单纯使用<code>Handler</code>的方法来实现定时通知的功能，但是采用Handler的方法会更好，优点不仅仅在于代码量会少很多，更主要在使用于Timer会产生bug。</p>
+<h3 id="使用Timer＋Handler的方式"><a href="#使用Timer＋Handler的方式" class="headerlink" title="使用Timer＋Handler的方式"></a>使用Timer＋Handler的方式</h3><p>这种方式在TimerTask的<code>run</code>方法中sendMessage给Handler，实现定时操作的目的，但是使用Timer本身会出现一种问题，看下面的实验代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">TimerTask timerTask = <span class="keyword">new</span> TimerTask() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		print(<span class="string">"first"</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		print(<span class="string">"second"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Timer timer = <span class="keyword">new</span> Timer();</span><br><span class="line">timer.schedule(timerTask, <span class="number">0</span>, <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>愿意是想立即执行一次这样的任务：先输出<code>first</code>，隔2秒再输出<code>second</code>，然后再隔1秒，再执行一次同样的任务，但是当执行过后就会发现，<code>second</code>输出完之后会马上输出<code>first</code>，并没有延迟1秒，问题就在于timer的时间延迟是从任务开始执行时就已经计算了，并不是上一次任务执行完成后才计算的，因此这个任务执行了2秒，其实第二次任务已经开始执行了，但是是单队列，所以并没有马上出现，但是下一次已经不会再如我们所愿的延迟1秒了(但是它其实也按照它自己的方式延迟了1秒，也就是它不在乎任务有没有执行完，我自己发出命令就开始计算1秒，然后再发出命令)，因此这种方式可能会出现问题。</p>
+<h3 id="只使用Handler的方式"><a href="#只使用Handler的方式" class="headerlink" title="只使用Handler的方式"></a>只使用Handler的方式</h3><p>这种方式既简单也没有风险:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">handler.sendEmptyMessageDelayed(MSG_TIME_COUNT, <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>一句代码即可搞定，会延迟1秒发送消息给<code>handleMessage</code>来处理，而且每次是等任务执行完才会开始延迟。</p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2015/03/26/timer-handler/" class="article-date">
+  <time datetime="2015-03-26T12:56:44.000Z" itemprop="datePublished">Mar 26 2015</time>
+</a>
+
+        </li>
+        
+          <li>
+            <span class="label">Category:</span>
+            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/android/">android</a>
+  </div>
+
+
+          </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">android</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+
+</div>
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Yifan</p>
+
+
+      </div>
+    </footer>
+
+      
+  <script>
+   var disqus_shortname = 'yifan16';
+   
+   (function(){
+     var dsq = document.createElement('script');
+     dsq.type = 'text/javascript';
+     dsq.async = true;
+     dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/typing.js"></script>
+
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?552594b20fca263dbb0651a8155b477a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>堆与优先队列 | Hack | Yifan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="堆的定义这里说的堆是指二叉堆,二叉堆是完全二叉树或者是近似完全二叉树。二叉堆满足二个特性：  父结点的键值总是大于或等于（小于或等于）任何一个子节点的键值。 每个结点的左子树和右子树都是一个二叉堆（都是最大堆或最小堆）。  当父结点的键值总是大于或等于任何一个子节点的键值时为最大堆。当父结点的键值总是小于或等于任何一个子节点的键值时为最小堆 因为堆的本质是完全二叉树，因此 1对于一个结点数为n的堆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="堆与优先队列">
+<meta property="og:url" content="http://zhuyifan2013.github.io/2016/04/12/heap-2016-04-12/index.html">
+<meta property="og:site_name" content="Hack | Yifan">
+<meta property="og:description" content="堆的定义这里说的堆是指二叉堆,二叉堆是完全二叉树或者是近似完全二叉树。二叉堆满足二个特性：  父结点的键值总是大于或等于（小于或等于）任何一个子节点的键值。 每个结点的左子树和右子树都是一个二叉堆（都是最大堆或最小堆）。  当父结点的键值总是大于或等于任何一个子节点的键值时为最大堆。当父结点的键值总是小于或等于任何一个子节点的键值时为最小堆 因为堆的本质是完全二叉树，因此 1对于一个结点数为n的堆">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2016-04-12T03:00:12.000Z">
+<meta property="article:modified_time" content="2020-02-05T06:06:39.999Z">
+<meta property="article:author" content="Yifan">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hack | Yifan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/typing.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+  
+    <body>
+  
+      <div id="container" class="container">
+        <article id="post-heap-2016-04-12" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      堆与优先队列
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <h2 id="堆的定义"><a href="#堆的定义" class="headerlink" title="堆的定义"></a>堆的定义</h2><p>这里说的堆是指二叉堆,二叉堆是完全二叉树或者是近似完全二叉树。<br>二叉堆满足二个特性：</p>
+<ul>
+<li>父结点的键值总是大于或等于（小于或等于）任何一个子节点的键值。</li>
+<li>每个结点的左子树和右子树都是一个二叉堆（都是最大堆或最小堆）。</li>
+</ul>
+<p>当父结点的键值总是大于或等于任何一个子节点的键值时为<strong>最大堆</strong>。当父结点的键值总是小于或等于任何一个子节点的键值时为<strong>最小堆</strong></p>
+<p>因为堆的本质是完全二叉树，因此</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对于一个结点数为n的堆，其高度为lgn，证明过程可以设高度为h，则n&gt;&#x3D;2^h-1且n&lt;2^(h+1)-1，即可推导出结果</span><br></pre></td></tr></table></figure>
+
+<p>因此插入或者移除一个元素的时间复杂度即为O(lgn)</p>
+<h2 id="优先队列"><a href="#优先队列" class="headerlink" title="优先队列"></a>优先队列</h2><p>优先队列是一个无界队列，可以按照默认排序或者指定的comparator来排序，本质上仍然是一个堆，注意到这是非线程安全的。</p>
+<h2 id="堆的基本操作"><a href="#堆的基本操作" class="headerlink" title="堆的基本操作"></a>堆的基本操作</h2><p>往堆中添加元素其实就是要维护堆的属性，这里直接分析Java中优先队列的实现:</p>
+<p><strong>siftUpComparable</strong>是<strong>add</strong>的核心实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">siftUpComparable</span><span class="params">(<span class="keyword">int</span> k, E x)</span> </span>&#123;</span><br><span class="line">    Comparable&lt;? <span class="keyword">super</span> E&gt; key = (Comparable&lt;? <span class="keyword">super</span> E&gt;) x;</span><br><span class="line">    <span class="keyword">while</span> (k &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> parent = (k - <span class="number">1</span>) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        Object e = queue[parent];</span><br><span class="line">        <span class="keyword">if</span> (key.compareTo((E) e) &gt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        queue[k] = e;</span><br><span class="line">        k = parent;</span><br><span class="line">    &#125;</span><br><span class="line">    queue[k] = key;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> parent = (k - <span class="number">1</span>) &gt;&gt;&gt; <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>这一行是找到节点的父节点，子节点下标除2取下界，然后比较当前元素与父节点的大小,<strong>若大于父节点，则直接停止循环，放入当前的k值中，k的初始值是堆的size，注意size是从1开始数的，而索引是从0开始的。此后K值一直保存parent的索引，只到key值放入了parent的位置中</strong></p>
+<p><strong>siftDownComparable</strong>是<strong>remove</strong>和<strong>poll</strong>的核心实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">siftDownComparable</span><span class="params">(<span class="keyword">int</span> k, E x)</span> </span>&#123;</span><br><span class="line">    Comparable&lt;? <span class="keyword">super</span> E&gt; key = (Comparable&lt;? <span class="keyword">super</span> E&gt;)x;</span><br><span class="line">    <span class="keyword">int</span> half = size &gt;&gt;&gt; <span class="number">1</span>;        <span class="comment">// loop while a non-leaf</span></span><br><span class="line">    <span class="keyword">while</span> (k &lt; half) &#123;</span><br><span class="line">        <span class="keyword">int</span> child = (k &lt;&lt; <span class="number">1</span>) + <span class="number">1</span>; <span class="comment">// assume left child is least</span></span><br><span class="line">        Object c = queue[child];</span><br><span class="line">        <span class="keyword">int</span> right = child + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (right &lt; size &amp;&amp;</span><br><span class="line">            ((Comparable&lt;? <span class="keyword">super</span> E&gt;) c).compareTo((E) queue[right]) &gt; <span class="number">0</span>)</span><br><span class="line">            c = queue[child = right];</span><br><span class="line">        <span class="keyword">if</span> (key.compareTo((E) c) &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        queue[k] = c;</span><br><span class="line">        k = child;</span><br><span class="line">    &#125;</span><br><span class="line">    queue[k] = key;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>remove和poll是移除head的结点，移除之后要重新生成一个根节点，思路是：从原根节点的子节点开始找，找到左右子节点中较小的开刀，比较其与Queue中最后一个元素key的大小，若key小，则直接作为根节点；若key大，则将这个子节点上位，置为根节点，再开始分析这个子节点的子节点，分析过程如前。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2016/04/12/heap-2016-04-12/" class="article-date">
+  <time datetime="2016-04-12T03:00:12.000Z" itemprop="datePublished">Apr 12 2016</time>
+</a>
+
+        </li>
+        
+          <li>
+            <span class="label">Category:</span>
+            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+
+          </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2017/01/31/01-31-2017-16huigu/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Yifan的2016
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/09/volatile-java-2016-04-09/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">java的volatile关键字</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+  <section id="comments" class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Yifan</p>
+
+
+      </div>
+    </footer>
+
+      
+  <script>
+   var disqus_shortname = 'yifan16';
+   
+   var disqus_url = 'http://zhuyifan2013.github.io/2016/04/12/heap-2016-04-12/';
+   
+   (function(){
+     var dsq = document.createElement('script');
+     dsq.type = 'text/javascript';
+     dsq.async = true;
+     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/typing.js"></script>
+
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?552594b20fca263dbb0651a8155b477a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

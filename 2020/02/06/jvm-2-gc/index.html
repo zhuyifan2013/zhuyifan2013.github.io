@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>jvm-2-gc | Hack | Yifan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JVM系列文章  JVM 内存模型 JVM 垃圾回收原理及实践  垃圾回收原理Java 堆中存放着几乎所有的对象实例，回收之前要确定其是否存活着，有两种思路可以判断对象存活  引用计数算法  如果有其他对象对其引用，则计数器加一，引用失效的时候，计数器减一。计数器为0时则可以被回收。 弊端：无法解决对象互相引用的问题，他们是内存中的孤岛，但却无法被回收 例如： A.a &#x3D; B;B.b &#x3D; A  可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm-2-gc">
+<meta property="og:url" content="http://zhuyifan2013.github.io/2020/02/06/jvm-2-gc/index.html">
+<meta property="og:site_name" content="Hack | Yifan">
+<meta property="og:description" content="JVM系列文章  JVM 内存模型 JVM 垃圾回收原理及实践  垃圾回收原理Java 堆中存放着几乎所有的对象实例，回收之前要确定其是否存活着，有两种思路可以判断对象存活  引用计数算法  如果有其他对象对其引用，则计数器加一，引用失效的时候，计数器减一。计数器为0时则可以被回收。 弊端：无法解决对象互相引用的问题，他们是内存中的孤岛，但却无法被回收 例如： A.a &#x3D; B;B.b &#x3D; A  可">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="http://zhuyifan2013.github.io/2020/02/06/img/2020-02/002.png">
+<meta property="og:image" content="http://zhuyifan2013.github.io/2020/02/06/img/2020-02/003.png">
+<meta property="article:published_time" content="2020-02-06T06:55:48.000Z">
+<meta property="article:modified_time" content="2020-02-06T07:00:20.741Z">
+<meta property="article:author" content="Yifan">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zhuyifan2013.github.io/2020/02/06/img/2020-02/002.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hack | Yifan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/typing.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+  
+    <body>
+  
+      <div id="container" class="container">
+        <article id="post-jvm-2-gc" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      jvm-2-gc
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p>JVM系列文章</p>
+<ol>
+<li><a href="http://zhuyifan2013.github.io/2020/02/06/jvm-1-memory-structure">JVM 内存模型</a></li>
+<li><a href="http://zhuyifan2013.github.io/2020/02/06/jvm-2-gc">JVM 垃圾回收原理及实践</a></li>
+</ol>
+<h2 id="垃圾回收原理"><a href="#垃圾回收原理" class="headerlink" title="垃圾回收原理"></a>垃圾回收原理</h2><p>Java 堆中存放着几乎所有的对象实例，回收之前要确定其是否存活着，有两种思路可以判断对象存活</p>
+<ul>
+<li>引用计数算法</li>
+</ul>
+<p>如果有其他对象对其引用，则计数器加一，引用失效的时候，计数器减一。计数器为0时则可以被回收。</p>
+<p>弊端：无法解决对象互相引用的问题，他们是内存中的孤岛，但却无法被回收 例如： <code>A.a = B;B.b = A</code></p>
+<ul>
+<li>可达性分析算法</li>
+</ul>
+<p>通过一系列称为<code>GC Roots</code>的对象作为起始点，然后向下搜索，走过的路径为引用链，如果一个对象到GC Roots 没有任何引用链，则说明此对象是不可达（不可用）的。</p>
+<h4 id="四种引用"><a href="#四种引用" class="headerlink" title="四种引用"></a>四种引用</h4><ol>
+<li>强引用</li>
+</ol>
+<p>普通的引用方式， <code>A a = new A()</code> , 只要强引用还存在，GC就不会回收。</p>
+<ol start="2">
+<li>软引用</li>
+</ol>
+<p>描述有用但非必需的对象。在发生内存溢出异常之前，会把软引用的对象列为回收范围第二次再回收。如果第二次回收没有足够的内存，才抛出异常。 可以使用 <code>SoftReference</code></p>
+<ol start="3">
+<li>弱引用</li>
+</ol>
+<p>GC 总会回收掉被弱引用关联的对象。 <code>WeakReference</code></p>
+<ol start="4">
+<li>虚引用（幽灵引用，影子引用）</li>
+</ol>
+<p>最弱的引用。能在被GC回收时得到一个通知。 <code>phantomReference</code></p>
+<h2 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h2><ol>
+<li>标记-清除算法（Mark-Sweep）</li>
+</ol>
+<p>标记阶段标记出所有要回收的对象，标记完成后统一回收。</p>
+<p>缺点：效率不高；内存不连续，导致之后需要分配大对象时无法找到足够的连续内存而再次进行垃圾回收。</p>
+<ol start="2">
+<li>复制算法（Copying）</li>
+</ol>
+<p>将可用内存按容量划分为大小相等的两块，每次只用其中一块。用完一块后将上面还存活的对象复制到另外一块上。这样就没有碎片的问题了。</p>
+<p>缺点：内存被缩小为之前的一半，代价太高。</p>
+<p>但实际商业上新生代都是按照复制算法进行回收的，因为大多对象都是朝生夕死，所以并不是按1:1划分，而是将内存分为较大的 Eden空间和两块较小的 Survivor 空间。比例为8:1:1，这样可用空间就大大提升了。</p>
+<ol start="3">
+<li>标记-整理算法（Mark-Compact）</li>
+</ol>
+<p>与标记-整理算法一样，但是不是直接对可回收对象进行清理，而是让所有存活的向一端移动，然后直接清理掉端边界以外的内存。</p>
+<ol start="4">
+<li>分代收集算法</li>
+</ol>
+<p>本质上不是一种算法，而是根据对象存活周期的不同将内存划分为几块。Java 堆一般分为新生代和老年代。会根据不同代的特点选用不同的算法。</p>
+<h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h2><p>垃圾收集器是内存回收的具体实现，下面列举的是基于JDK 7的 HotSpot虚拟机。其中 CMS 和 G1 仅做简单介绍，但这两个收集器都是相对比较复杂的收集器。</p>
+<ol>
+<li>Serial（新生代） / Serial Old（老年代）</li>
+</ol>
+<p>是一个单线程的收集器，在收集的时候必须暂停其他所有的工作线程（Stop the World），这样是为了避免一边打扫垃圾又一边制造垃圾</p>
+<p>Serial 收集器到现在为止依然是 Client 模式下的默认新生代收集器，因为简单且高效。</p>
+<ol start="2">
+<li>ParNew</li>
+</ol>
+<p>多线程，其余与Serial一样。CMS（一个老年代的收集器）只能与 ParNew 或者 Serial 配合使用。</p>
+<ol start="3">
+<li>Parallel Scavenge（新生代） / Parallel Old（老年代）</li>
+</ol>
+<p>看起来与 ParNew 一样，但他的目标是吞吐量，即CPU用于运行用户代码的时间与CPU的总运行时间的比值。通常被称为吞吐量优先的收集器</p>
+<ol start="4">
+<li>CMS</li>
+</ol>
+<p>目标是以获取最短回收停顿时间为目标的收集器。</p>
+<ol start="5">
+<li>G1</li>
+</ol>
+<p>当今收集器技术发展的最前沿成果，主要面向服务端应用，目标是替换掉CMS收集器，特点有：</p>
+<ul>
+<li>并行与并发，可以缩短 Stop-The-World 时间</li>
+<li>分代收集，但是不用与其他的收集器配合，自己就可以管理整个堆</li>
+<li>空间整合</li>
+<li>可预测的停顿</li>
+</ul>
+<h2 id="内存分配与回收策略实践"><a href="#内存分配与回收策略实践" class="headerlink" title="内存分配与回收策略实践"></a>内存分配与回收策略实践</h2><p>这部分重要了解几个内存分配的常见情况，同时熟悉虚拟机参数的配置。</p>
+<ol>
+<li>对象优先在Eden分配</li>
+</ol>
+<p><a href="https://gist.github.com/zhuyifan2013/591c246bcc7fb7913fdc1999e1bb4174" target="_blank" rel="noopener">Code Gist</a></p>
+<p>虚拟机参数设置：-verbose:gc -Xms20M -Xms20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8<br>Eden区属于新生代，优先在此区域分配，如果没有足够的空间会执行一次 Minor GC。Gist里的代码展示了分配3个2MB大小，一个4MB大小的对象，可以看到第一次执行了Minor GC，结果是6MB的对象移入了老年代，4MB的新对象放入了Eden区。 <code>-XX:SurvivorRatio=8</code> 是将 Eden与Survivor区域比值设置为8:1</p>
+<p>可以看到经过一次GC，新生代中有6M的内容被移入了老年代。</p>
+<p><img src="../img/2020-02/002.png" alt="Terminal1"></p>
+<ol start="2">
+<li>大对象直接进入老年代</li>
+</ol>
+<p><a href="https://gist.github.com/zhuyifan2013/367ff47eabd40d1b12b500c057e09247" target="_blank" rel="noopener">Code Gist</a></p>
+<p>虚拟机参数设置：-verbose:gc -Xms20M -Xms20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:PretenureSizeThreshold=3145728 </p>
+<p>通过设置 <code>-XX:PretenureSizeThreshold=3145728</code> 可以使超过3M的对象直接在老年代进行分配，运行完代码可以看到，4M的内容直接在老年代上了。 </p>
+<ol start="3">
+<li>长期存活的对象将进入老年代</li>
+</ol>
+<p><a href="https://gist.github.com/8cdcf70732b43761bfbd740cce5340e9" target="_blank" rel="noopener">Code Gist</a></p>
+<p>虚拟机给每个对象设置了一个年龄（Age）计数器，如果对象在Eden区出生且经过一次Minor GC还存活，就将其放入Survivor区，并使年龄增加1，对象在Survivor区域每熬过一次Minor GC年龄都会增加1，当增加到默认值15岁时就会晋升入老年代中。<br>这个默认阈值可以通过 <code>-XX:MaxTenuringThreshold</code> 设置</p>
+<p>从运行结果上可以看到，尽管 alloc1 只要256KB，但在第二次GC的时候还是被移入了老年代</p>
+<p><img src="../img/2020-02/003.png" alt="Terminal2"></p>
+<ol start="4">
+<li>动态对象年龄判定</li>
+</ol>
+<p>这个实际上是对上一条的优化，有时候并不是要求对象的年龄必须到了 <code>MaxTenuringThreshold</code> 才能晋升老年代，如果 Survivor 空间中相同年龄所有对象大小的总和大于SUrvivor空间的一半，则年龄大于或等于该年龄的对象直接进入老年代。</p>
+<h4 id="One-more-thing"><a href="#One-more-thing" class="headerlink" title="One more thing"></a>One more thing</h4><p>对象的 finalize() 函数可以作为拯救自己的手段，也就是在的对象 finalize() 中使其与GC Roots从新建立关系，这样就不会被收集。但这是一个投机取巧的办法，不鼓励使用。而且finalize()方法也只会被执行一次。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2020/02/06/jvm-2-gc/" class="article-date">
+  <time datetime="2020-02-06T06:55:48.000Z" itemprop="datePublished">Feb 6 2020</time>
+</a>
+
+        </li>
+        
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2020/02/06/jvm-1-memory-structure/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">jvm-1-memory-structure</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+  <section id="comments" class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Yifan</p>
+
+
+      </div>
+    </footer>
+
+      
+  <script>
+   var disqus_shortname = 'yifan16';
+   
+   var disqus_url = 'http://zhuyifan2013.github.io/2020/02/06/jvm-2-gc/';
+   
+   (function(){
+     var dsq = document.createElement('script');
+     dsq.type = 'text/javascript';
+     dsq.async = true;
+     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/typing.js"></script>
+
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?552594b20fca263dbb0651a8155b477a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>
